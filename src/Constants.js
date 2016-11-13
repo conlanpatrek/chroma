@@ -13,3 +13,11 @@ export const PREFERRED_CONVERSIONS = {
     Hex: ['RGB', 'CMYK'],
     CMYK: ['RGB', 'Hex']
 };
+
+export const MODE_PROPS = {
+    RGB: ['r', 'g', 'b'],
+    HSL: ['h', 's', 'l'],
+    HSV: ['h', 's', 'v'],
+    Hex: (val) => typeof val === 'string',
+    CMYK: ['c', 'm', 'y', 'k']
+}

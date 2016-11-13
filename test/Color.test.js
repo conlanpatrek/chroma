@@ -75,6 +75,65 @@ const testColorMode = (mode) => {
 describe(
     'Color',
     () => {
+        describe(
+            'constructor()',
+            () => {
+                it(
+                    'detects rgb mode if provided',
+                    () => {
+                        let input = {r: 0, g: 0, b: 0},
+                            instance = new Color(input);
+                        instance.colorData.RGB.should.eql(input);
+                    }
+                );
+
+                it(
+                    'detects hex mode if provided',
+                    () => {
+                        let input = '#000000',
+                            instance = new Color(input);
+                        instance.colorData.Hex.should.eql(input);
+                    }
+                );
+
+                it(
+                    'detects hsl mode if provided',
+                    () => {
+                        let input = {h: 0, s: 0, l: 0},
+                            instance = new Color(input);
+                        instance.colorData.HSL.should.eql(input);
+                    }
+                );
+
+                it(
+                    'detects hsv mode if provided',
+                    () => {
+                        let input = {h: 0, s: 0, v: 0},
+                            instance = new Color(input);
+                        instance.colorData.HSV.should.eql(input);
+                    }
+                );
+
+                it(
+                    'detects cmyk mode if provided',
+                    () => {
+                        let input = {c: 0, m: 0, y: 0, k: 0},
+                            instance = new Color(input);
+                        instance.colorData.CMYK.should.eql(input);
+                    }
+                );
+
+                it(
+                    'throws if it can\'t detect color mode',
+                    () => {
+                        expect(
+                            () => new Color({})
+                        ).to.throw();
+                    }
+                );
+            }
+        );
+
         COLOR_MODES.forEach(testColorMode);
     }
 );

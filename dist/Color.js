@@ -6,7 +6,25 @@
 
 padStart = 'default' in padStart ? padStart['default'] : padStart;
 
-var COLOR_MODES = ['RGB', 'HSL', 'HSV', 'CMYK', 'Hex'];
+var COLOR_MODES = ['RGB', 'HSL', 'HSV', 'Hex', 'CMYK'];
+
+var PREFERRED_CONVERSIONS = {
+    RGB: ['Hex', 'CMYK'],
+    HSL: ['HSV', 'RGB'],
+    HSV: ['HSL', 'RGB'],
+    Hex: ['RGB', 'CMYK'],
+    CMYK: ['RGB', 'Hex']
+};
+
+var MODE_PROPS = {
+    RGB: ['r', 'g', 'b'],
+    HSL: ['h', 's', 'l'],
+    HSV: ['h', 's', 'v'],
+    Hex: function Hex(val) {
+        return typeof val === 'string';
+    },
+    CMYK: ['c', 'm', 'y', 'k']
+};
 
 function mod(n, m) {
     return (n % m + m) % m;
@@ -135,10 +153,10 @@ var HSL = {
         });
     },
     toHex: function toHex(colorData) {
-        return RGB.toHex(this.toRGB(colorData));
+        return RGB.toHex(HSL.toRGB(colorData));
     },
     toCMYK: function toCMYK(colorData) {
-        return RGB.toCMYK(this.toRGB(colorData));
+        return RGB.toCMYK(HSL.toRGB(colorData));
     }
 };
 
@@ -209,14 +227,14 @@ var HSV = {
         return colorData;
     },
     toHex: function toHex(colorData) {
-        return RGB.toHex(this.toRGB(colorData));
+        return RGB.toHex(HSV.toRGB(colorData));
     },
     toCMYK: function toCMYK(colorData) {
-        return RGB.toCMYK(this.toRGB(colorData));
+        return RGB.toCMYK(HSV.toRGB(colorData));
     }
 };
 
-var Hex = {
+var Hex$1 = {
     toRGB: function toRGB(colorData) {
         var hex = colorData.Hex;
         return colorData.set('RGB', {
@@ -226,16 +244,16 @@ var Hex = {
         });
     },
     toHSL: function toHSL(colorData) {
-        return RGB.toHSL(this.toRGB(colorData));
+        return RGB.toHSL(Hex$1.toRGB(colorData));
     },
     toHSV: function toHSV(colorData) {
-        return RGB.toHSV(this.toRGB(colorData));
+        return RGB.toHSV(Hex$1.toRGB(colorData));
     },
     toHex: function toHex(colorData) {
         return colorData;
     },
     toCMYK: function toCMYK(colorData) {
-        return RGB.toCMYK(this.toRGB(colorData));
+        return RGB.toCMYK(Hex$1.toRGB(colorData));
     }
 };
 
@@ -254,13 +272,13 @@ var CMYK = {
         });
     },
     toHSL: function toHSL(colorData) {
-        return RGB.toHSL(this.toRGB(colorData));
+        return RGB.toHSL(CMYK.toRGB(colorData));
     },
     toHSV: function toHSV(colorData) {
-        return RGB.toHSV(this.toRGB(colorData));
+        return RGB.toHSV(CMYK.toRGB(colorData));
     },
     toHex: function toHex(colorData) {
-        return RGB.toHex(this.toRGB(colorData));
+        return RGB.toHex(CMYK.toRGB(colorData));
     },
     toCMYK: function toCMYK(colorData) {
         return colorData;
@@ -289,82 +307,10 @@ var Converters = {
     RGB: RGB,
     HSL: HSL,
     HSV: HSV,
-    Hex: Hex,
+    Hex: Hex$1,
     CMYK: CMYK,
     Null: Null
 };
-
-var ColorData = immutable.Record(COLOR_MODES.reduce(function (op, mode) {
-    op[mode] = null;
-    return op;
-}, {}));
-
-ColorData.prototype._getConverter = function () {
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-        for (var _iterator = COLOR_MODES[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var mode = _step.value;
-
-            if (this[mode] !== null) {
-                return ColorData.Converters[mode];
-            }
-        }
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
-        }
-    }
-
-    return ColorData.Converters.Null;
-};
-
-var _iteratorNormalCompletion2 = true;
-var _didIteratorError2 = false;
-var _iteratorError2 = undefined;
-
-try {
-    var _loop$1 = function _loop$1() {
-        var mode = _step2.value;
-
-        ColorData.prototype['ensure' + mode] = function () {
-            if (this[mode] === null) {
-                return this._getConverter()['to' + mode](this);
-            }
-            return this;
-        };
-    };
-
-    for (var _iterator2 = COLOR_MODES[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-        _loop$1();
-    }
-} catch (err) {
-    _didIteratorError2 = true;
-    _iteratorError2 = err;
-} finally {
-    try {
-        if (!_iteratorNormalCompletion2 && _iterator2.return) {
-            _iterator2.return();
-        }
-    } finally {
-        if (_didIteratorError2) {
-            throw _iteratorError2;
-        }
-    }
-}
-
-ColorData.Converters = Converters;
 
 var asyncGenerator = function () {
   function AwaitValue(value) {
@@ -573,12 +519,118 @@ var set = function set(object, property, value, receiver) {
   return value;
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var toConsumableArray = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+};
+
+var ColorData = immutable.Record(COLOR_MODES.reduce(function (op, mode) {
+    op[mode] = null;
+    return op;
+}, {}));
+
+ColorData.prototype._getConverter = function (target) {
+    var method = 'to' + target,
+        converter = ColorData.Converters.Null,
+        preferred = PREFERRED_CONVERSIONS[target] || [];
+
+    var _arr = [].concat(toConsumableArray(preferred), toConsumableArray(COLOR_MODES));
+
+    for (var _i = 0; _i < _arr.length; _i++) {
+        var source = _arr[_i];
+        if (this[source] !== null) {
+            converter = ColorData.Converters[source];
+        }
+    }
+
+    return converter[method];
+};
+
+var _iteratorNormalCompletion$1 = true;
+var _didIteratorError$1 = false;
+var _iteratorError$1 = undefined;
+
+try {
+    var _loop$1 = function _loop$1() {
+        var mode = _step$1.value;
+
+        ColorData.prototype['ensure' + mode] = function () {
+            if (this[mode] === null) {
+                return this._getConverter(mode)(this);
+            }
+            return this;
+        };
+    };
+
+    for (var _iterator$1 = COLOR_MODES[Symbol.iterator](), _step$1; !(_iteratorNormalCompletion$1 = (_step$1 = _iterator$1.next()).done); _iteratorNormalCompletion$1 = true) {
+        _loop$1();
+    }
+} catch (err) {
+    _didIteratorError$1 = true;
+    _iteratorError$1 = err;
+} finally {
+    try {
+        if (!_iteratorNormalCompletion$1 && _iterator$1.return) {
+            _iterator$1.return();
+        }
+    } finally {
+        if (_didIteratorError$1) {
+            throw _iteratorError$1;
+        }
+    }
+}
+
+ColorData.Converters = Converters;
+
 var Color = function Color() {
     var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { r: 0, g: 0, b: 0 };
     classCallCheck(this, Color);
 
-    this.colorData = ColorData({ RGB: data });
+    this.colorData = ColorDataFactory(data);
 };
+
+function ColorDataFactory(input) {
+    var detected = null;
+    for (var mode in MODE_PROPS) {
+        var props = MODE_PROPS[mode];
+        if (props instanceof Array) {
+            if (props.reduce(function (op, prop) {
+                return op && input[prop] !== undefined;
+            }, true)) {
+                detected = mode;
+            }
+        } else {
+            if (props(input)) {
+                detected = mode;
+            }
+        }
+    }
+
+    if (detected) {
+        return new ColorData(defineProperty({}, detected, input));
+    }
+
+    throw new Error('Can\'t parse color input');
+}
 
 var _iteratorNormalCompletion = true;
 var _didIteratorError = false;
