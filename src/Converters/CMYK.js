@@ -18,21 +18,21 @@ const CMYK = {
     toHSL (colorData)
     {
         return RGB.toHSL(
-            this.toRGB(colorData)
+            CMYK.toRGB(colorData)
         );
     },
 
     toHSV (colorData)
     {
         return RGB.toHSV(
-            this.toRGB(colorData)
+            CMYK.toRGB(colorData)
         );
     },
 
     toHex (colorData)
     {
         return RGB.toHex(
-            this.toRGB(colorData)
+            CMYK.toRGB(colorData)
         );
     },
 

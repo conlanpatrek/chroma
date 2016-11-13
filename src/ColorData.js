@@ -1,5 +1,5 @@
 import { Record } from 'immutable';
-import { COLOR_MODES } from 'Color/Constants';
+import { COLOR_MODES, PREFERRED_CONVERSIONS } from 'Color/Constants';
 import Converters from 'Color/Converters';
 
 const ColorData = Record(
@@ -9,19 +9,24 @@ const ColorData = Record(
     }, {})
 );
 
-ColorData.prototype._getConverter = function () {
-    for (let mode of COLOR_MODES) {
-        if (this[mode] !== null) {
-            return ColorData.Converters[mode];
+ColorData.prototype._getConverter = function (target) {
+    let method = `to${target}`,
+        converter = ColorData.Converters.Null,
+        preferred = PREFERRED_CONVERSIONS[target] || [];
+
+    for (let source of [ ...preferred, ...COLOR_MODES ]) {
+        if (this[source] !== null) {
+            converter = ColorData.Converters[source];
         }
     }
-    return ColorData.Converters.Null;
+
+    return converter[method];
 };
 
 for (let mode of COLOR_MODES) {
     ColorData.prototype[`ensure${mode}`] = function() {
         if (this[mode] === null) {
-            return this._getConverter()[`to${mode}`](this)
+            return this._getConverter(mode)(this)
         }
         return this;
     };

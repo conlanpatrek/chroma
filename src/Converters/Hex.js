@@ -18,14 +18,14 @@ const Hex = {
     toHSL (colorData)
     {
         return RGB.toHSL(
-            this.toRGB(colorData)
+            Hex.toRGB(colorData)
         );
     },
 
     toHSV (colorData)
     {
         return RGB.toHSV(
-            this.toRGB(colorData)
+            Hex.toRGB(colorData)
         );
     },
 
@@ -37,7 +37,7 @@ const Hex = {
     toCMYK (colorData)
     {
         return RGB.toCMYK(
-            this.toRGB(colorData)
+            Hex.toRGB(colorData)
         );
     }
 

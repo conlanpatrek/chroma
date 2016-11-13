@@ -2,6 +2,14 @@ export const COLOR_MODES = [
     'RGB',
     'HSL',
     'HSV',
-    'CMYK',
-    'Hex'
+    'Hex',
+    'CMYK'
 ];
+
+export const PREFERRED_CONVERSIONS = {
+    RGB: ['Hex', 'CMYK'],
+    HSL: ['HSV', 'RGB'],
+    HSV: ['HSL', 'RGB'],
+    Hex: ['RGB', 'CMYK'],
+    CMYK: ['RGB', 'Hex']
+};

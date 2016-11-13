@@ -76,14 +76,14 @@ const HSV = {
     toHex (colorData)
     {
         return RGB.toHex(
-            this.toRGB(colorData)
+            HSV.toRGB(colorData)
         );
     },
 
     toCMYK (colorData)
     {
         return RGB.toCMYK(
-            this.toRGB(colorData)
+            HSV.toRGB(colorData)
         );
     }
 
