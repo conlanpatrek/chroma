@@ -1,8 +1,8 @@
 {
   "name": "color",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/Color.js",
   "dependencies": {
     "immutable": "^3.8.1",
     "lodash": "^4.16.6"
