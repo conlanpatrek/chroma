@@ -58,12 +58,12 @@ const testColorMode = (mode) => {
                 'When called with arguments',
                 () => {
                     it(
-                        `Sets a new colorData with the provided ${mode} value`,
+                        `Returns a new Color with the provided ${mode} value`,
                         () => {
-                            let colorData = color.colorData;
-                            color[mode]('test');
-                            color.colorData.should.not.equal(colorData);
-                            color.colorData[mode].should.equal('test');
+                            let colorData = color.colorData,
+                                modified = color[mode]('test');
+                            color.should.not.equal(modified);
+                            modified.colorData[mode].should.equal('test');
                         }
                     );
                 }
@@ -120,6 +120,15 @@ describe(
                         let input = {c: 0, m: 0, y: 0, k: 0},
                             instance = new Color(input);
                         instance.colorData.CMYK.should.eql(input);
+                    }
+                );
+
+                it(
+                    'accepts a colorData if provided',
+                    () => {
+                        let source = new Color('#ff0000'),
+                            copy = new Color(source.colorData);
+                        copy.colorData.should.equal(source.colorData);
                     }
                 );
 

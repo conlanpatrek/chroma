@@ -11,6 +11,8 @@ export default class Color
 
 function ColorDataFactory(input)
 {
+    if (input instanceof ColorData) return input;
+
     let detected = null;
     for (let mode in MODE_PROPS) {
         let props = MODE_PROPS[mode];
@@ -44,13 +46,13 @@ for (let mode of COLOR_MODES) {
         setter = `_set${mode}`;
     Color.prototype[mode] = function (value) {
         if (value) {
-            this[setter](value);
+            return this[setter](value);
         }
         return this[getter]();
     };
 
     Color.prototype[setter] = function (value) {
-        this.colorData = ColorData({ [mode]: value });
+        return new Color(ColorData({ [mode]: value }));
     };
 
     Color.prototype[getter] = function (value) {
