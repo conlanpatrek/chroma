@@ -6,14 +6,15 @@
 
 padStart = 'default' in padStart ? padStart['default'] : padStart;
 
-var COLOR_MODES = ['RGB', 'HSL', 'HSV', 'Hex', 'CMYK'];
+var COLOR_MODES = ['RGB', 'HSL', 'HSV', 'Hex', 'CMYK', 'Numeric'];
 
 var PREFERRED_CONVERSIONS = {
     RGB: ['Hex', 'CMYK'],
     HSL: ['HSV', 'RGB'],
     HSV: ['HSL', 'RGB'],
     Hex: ['RGB', 'CMYK'],
-    CMYK: ['RGB', 'Hex']
+    CMYK: ['RGB', 'Hex'],
+    Numeric: ['RGB', 'Hex', 'CMYK']
 };
 
 var MODE_PROPS = {
@@ -23,7 +24,10 @@ var MODE_PROPS = {
     Hex: function Hex(val) {
         return typeof val === 'string';
     },
-    CMYK: ['c', 'm', 'y', 'k']
+    CMYK: ['c', 'm', 'y', 'k'],
+    Numeric: function Numeric(val) {
+        return typeof val === 'number';
+    }
 };
 
 function mod(n, m) {
@@ -83,6 +87,9 @@ var RGB = {
             y = 1 - k && (1 - b - k) / (1 - k);
 
         return colorData.set('CMYK', { c: c, m: m, y: y, k: k });
+    },
+    toNumeric: function toNumeric(colorData) {
+        return colorData.set('Numeric', Math.round(colorData.RGB.r) * 0x10000 + Math.round(colorData.RGB.g) * 0x100 + Math.round(colorData.RGB.b));
     }
 };
 
@@ -157,6 +164,9 @@ var HSL = {
     },
     toCMYK: function toCMYK(colorData) {
         return RGB.toCMYK(HSL.toRGB(colorData));
+    },
+    toNumeric: function toNumeric(colorData) {
+        return RGB.toNumeric(HSL.toRGB(colorData));
     }
 };
 
@@ -231,6 +241,9 @@ var HSV = {
     },
     toCMYK: function toCMYK(colorData) {
         return RGB.toCMYK(HSV.toRGB(colorData));
+    },
+    toNumeric: function toNumeric(colorData) {
+        return RGB.toNumeric(HSV.toRGB(colorData));
     }
 };
 
@@ -254,6 +267,9 @@ var Hex$1 = {
     },
     toCMYK: function toCMYK(colorData) {
         return RGB.toCMYK(Hex$1.toRGB(colorData));
+    },
+    toNumeric: function toNumeric(colorData) {
+        return colorData.set('Numeric', parseInt(colorData.Hex.substring(1), 16));
     }
 };
 
@@ -282,6 +298,34 @@ var CMYK = {
     },
     toCMYK: function toCMYK(colorData) {
         return colorData;
+    },
+    toNumeric: function toNumeric(colorData) {
+        return RGB.toNumeric(CMYK.toRGB(colorData));
+    }
+};
+
+var Numeric$1 = {
+    toRGB: function toRGB(colorData) {
+        return colorData.set('RGB', {
+            r: Math.floor(colorData.Numeric / 0x10000),
+            g: Math.floor(colorData.Numeric % 0x10000 / 0x100),
+            b: colorData.Numeric % 0x100
+        });
+    },
+    toHSL: function toHSL(colorData) {
+        return RGB.toHSL(Numeric$1.toRGB(colorData));
+    },
+    toHSV: function toHSV(colorData) {
+        return RGB.toHSV(Numeric$1.toRGB(colorData));
+    },
+    toHex: function toHex(colorData) {
+        return RGB.toHex(Numeric$1.toRGB(colorData));
+    },
+    toCMYK: function toCMYK(colorData) {
+        return RGB.toCMYK(Numeric$1.toRGB(colorData));
+    },
+    toNumeric: function toNumeric(colorData) {
+        return colorData;
     }
 };
 
@@ -300,6 +344,9 @@ var Null = {
     },
     toCMYK: function toCMYK(colorData) {
         return colorData;
+    },
+    toNumeric: function toNumeric(colorData) {
+        return colorData;
     }
 };
 
@@ -309,6 +356,7 @@ var Converters = {
     HSV: HSV,
     Hex: Hex$1,
     CMYK: CMYK,
+    Numeric: Numeric$1,
     Null: Null
 };
 
