@@ -83,6 +83,16 @@ const RGB = {
             'CMYK',
             { c, m, y, k }
         );
+    },
+
+    toNumeric (colorData)
+    {
+        return colorData.set(
+            'Numeric',
+            Math.round(colorData.RGB.r) * 0x10000
+            + Math.round(colorData.RGB.g) * 0x100
+            + Math.round(colorData.RGB.b)
+        )
     }
 
 };

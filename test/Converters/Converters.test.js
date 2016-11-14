@@ -1,14 +1,14 @@
 import { Record } from 'immutable';
 import Converters from 'Color/Converters';
 import { COLOR_MODES } from 'Color/Constants';
-import Answers from './answers.json';
+import Answers from './answers';
 
-const SOLO_MODE = null;
+const SOLO_MODE = false;
 const MODE_MATCH_DEPTH = {
-    'RGB': {r: 0, g: 0, b: 0},
-    'CMYK': {c: 2, m: 2, y: 2, k: 2},
-    'HSL': {h: 0, s: 2, l: 2},
-    'HSV': {h: 0, s: 2, v: 2}
+    'RGB': {r: 1, g: 1, b: 1},
+    'CMYK': {c: .01, m: .01, y: .01, k: .01},
+    'HSL': {h: 1, s: .01, l: .01},
+    'HSV': {h: 1, s: .01, v: .01}
 }
 
 let record = Record(
@@ -65,7 +65,8 @@ const testConversionMethod = (converter, conversionMethod, fromMode, toMode) => 
                                     channel => {
                                         converted[toMode][channel].should.be.closeTo(
                                             answer[toMode][channel],
-                                            Math.pow(.1, MODE_MATCH_DEPTH[toMode][channel])
+                                            MODE_MATCH_DEPTH[toMode][channel],
+                                            `${JSON.stringify(converted[toMode])} should be close to ${JSON.stringify(answer[toMode])}`
                                         );
                                     }
                                 );

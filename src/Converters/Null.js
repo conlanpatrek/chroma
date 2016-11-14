@@ -23,6 +23,11 @@ const Null = {
     toCMYK (colorData)
     {
         return colorData;
+    },
+
+    toNumeric (colorData)
+    {
+        return colorData;
     }
 
 };

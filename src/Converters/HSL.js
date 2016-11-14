@@ -85,6 +85,13 @@ const HSL = {
         return RGB.toCMYK(
             HSL.toRGB(colorData)
         );
+    },
+
+    toNumeric (colorData)
+    {
+        return RGB.toNumeric(
+            HSL.toRGB(colorData)
+        );
     }
 
 };

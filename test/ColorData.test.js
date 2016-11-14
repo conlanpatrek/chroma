@@ -20,7 +20,7 @@ const testColorMode = (mode) => {
                                 let colorData = new ColorData({ [mode]: null, [mode_too]: 'test' });
                                 let output = colorData[ensureMode]();
                                 ColorData.Converters[mode_too][toMode].calledWith(colorData).should.be.true;
-                                expect(output).to.equal(ColorData.Converters[mode_too][toMode].returnValues[0]);
+                                expect(output).to.eql(ColorData.Converters[mode_too][toMode].returnValues[0]);
                             }
                         )
                     });

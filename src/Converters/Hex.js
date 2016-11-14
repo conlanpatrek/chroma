@@ -39,6 +39,14 @@ const Hex = {
         return RGB.toCMYK(
             Hex.toRGB(colorData)
         );
+    },
+
+    toNumeric (colorData)
+    {
+        return colorData.set(
+            'Numeric',
+            parseInt(colorData.Hex.substring(1), 16)
+        );
     }
 
 };

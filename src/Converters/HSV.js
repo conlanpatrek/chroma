@@ -85,6 +85,13 @@ const HSV = {
         return RGB.toCMYK(
             HSV.toRGB(colorData)
         );
+    },
+
+    toNumeric (colorData)
+    {
+        return RGB.toNumeric(
+            HSV.toRGB(colorData)
+        );
     }
 
 };

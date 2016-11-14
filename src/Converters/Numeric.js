@@ -1,16 +1,15 @@
 import RGB from './RGB';
 
-const CMYK = {
+const Numeric = {
 
     toRGB (colorData)
     {
-        let { c, m, y, k } = colorData.CMYK;
         return colorData.set(
             'RGB',
             {
-                r: 255 * (1 - c) * (1 - k),
-                g: 255 * (1 - m) * (1 - k),
-                b: 255 * (1 - y) * (1 - k)
+                r: Math.floor(colorData.Numeric / 0x10000),
+                g: Math.floor((colorData.Numeric % 0x10000) / 0x100),
+                b: colorData.Numeric % 0x100
             }
         );
     },
@@ -18,36 +17,36 @@ const CMYK = {
     toHSL (colorData)
     {
         return RGB.toHSL(
-            CMYK.toRGB(colorData)
+            Numeric.toRGB(colorData)
         );
     },
 
     toHSV (colorData)
     {
         return RGB.toHSV(
-            CMYK.toRGB(colorData)
+            Numeric.toRGB(colorData)
         );
     },
 
     toHex (colorData)
     {
         return RGB.toHex(
-            CMYK.toRGB(colorData)
+            Numeric.toRGB(colorData)
         );
     },
 
     toCMYK (colorData)
     {
-        return colorData;
+        return RGB.toCMYK(
+            Numeric.toRGB(colorData)
+        );
     },
 
     toNumeric (colorData)
     {
-        return RGB.toNumeric(
-            CMYK.toRGB(colorData)
-        );
+        return colorData;
     }
 
 };
 
-export default CMYK;
+export default Numeric;

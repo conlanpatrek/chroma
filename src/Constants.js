@@ -3,7 +3,8 @@ export const COLOR_MODES = [
     'HSL',
     'HSV',
     'Hex',
-    'CMYK'
+    'CMYK',
+    'Numeric'
 ];
 
 export const PREFERRED_CONVERSIONS = {
@@ -11,7 +12,8 @@ export const PREFERRED_CONVERSIONS = {
     HSL: ['HSV', 'RGB'],
     HSV: ['HSL', 'RGB'],
     Hex: ['RGB', 'CMYK'],
-    CMYK: ['RGB', 'Hex']
+    CMYK: ['RGB', 'Hex'],
+    Numeric: ['RGB', 'Hex', 'CMYK']
 };
 
 export const MODE_PROPS = {
@@ -19,5 +21,6 @@ export const MODE_PROPS = {
     HSL: ['h', 's', 'l'],
     HSV: ['h', 's', 'v'],
     Hex: (val) => typeof val === 'string',
-    CMYK: ['c', 'm', 'y', 'k']
+    CMYK: ['c', 'm', 'y', 'k'],
+    Numeric: (val) => typeof val === 'number'
 }
