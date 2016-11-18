@@ -75,23 +75,22 @@ const HSL = {
 
     toHex (colorData)
     {
-        return RGB.toHex(
-            HSL.toRGB(colorData)
-        );
+        return RGB.toHex(HSL.toRGB(colorData));
     },
 
     toCMYK (colorData)
     {
-        return RGB.toCMYK(
-            HSL.toRGB(colorData)
-        );
+        return RGB.toCMYK(HSL.toRGB(colorData));
     },
 
     toNumeric (colorData)
     {
-        return RGB.toNumeric(
-            HSL.toRGB(colorData)
-        );
+        return RGB.toNumeric(HSL.toRGB(colorData));
+    },
+
+    toBits (colorData)
+    {
+        return RGB.toBits(HSL.toRGB(colorData));
     }
 
 };

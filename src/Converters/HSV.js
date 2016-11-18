@@ -75,23 +75,22 @@ const HSV = {
 
     toHex (colorData)
     {
-        return RGB.toHex(
-            HSV.toRGB(colorData)
-        );
+        return RGB.toHex(HSV.toRGB(colorData));
     },
 
     toCMYK (colorData)
     {
-        return RGB.toCMYK(
-            HSV.toRGB(colorData)
-        );
+        return RGB.toCMYK(HSV.toRGB(colorData));
     },
 
     toNumeric (colorData)
     {
-        return RGB.toNumeric(
-            HSV.toRGB(colorData)
-        );
+        return RGB.toNumeric(HSV.toRGB(colorData));
+    },
+
+    toBits (colorData)
+    {
+        return RGB.toBits(HSV.toRGB(colorData));
     }
 
 };

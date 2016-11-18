@@ -24,14 +24,7 @@ const RGB = {
                              ((r - g) / delta) + 4) * 60,
             s = delta && delta / ( 1 - Math.abs(2 * l - 1));
 
-        return colorData.set(
-            'HSL',
-            {
-                h,
-                s,
-                l
-            }
-        );
+        return colorData.set('HSL', { h, s, l });
     },
 
     toHSV (colorData)
@@ -93,6 +86,34 @@ const RGB = {
             + Math.round(colorData.RGB.g) * 0x100
             + Math.round(colorData.RGB.b)
         )
+    },
+
+    toBits (colorData)
+    {
+        let {r, g, b} = colorData.RGB,
+            i = 8,
+            bits = [];
+
+        while (i--) {
+            bits.unshift((b & 1) === 1);
+            b = b >> 1;
+        }
+
+        i = 8;
+
+        while (i--) {
+            bits.unshift((g & 1) === 1);
+            g = g >> 1;
+        }
+
+        i = 8;
+
+        while (i--) {
+            bits.unshift((r & 1) === 1);
+            r = r >> 1;
+        }
+
+        return colorData.set('Bits', bits);
     }
 
 };

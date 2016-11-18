@@ -45,6 +45,20 @@ const Numeric = {
     toNumeric (colorData)
     {
         return colorData;
+    },
+
+    toBits (colorData)
+    {
+        let numeric = colorData.Numeric,
+            i = 24,
+            bits = [];
+
+        while (i--) {
+            bits.unshift((numeric & 1) === 1);
+            numeric = numeric >> 1;
+        }
+
+        return colorData.set('Bits', bits);
     }
 
 };

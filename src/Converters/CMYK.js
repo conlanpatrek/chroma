@@ -17,23 +17,17 @@ const CMYK = {
 
     toHSL (colorData)
     {
-        return RGB.toHSL(
-            CMYK.toRGB(colorData)
-        );
+        return RGB.toHSL(CMYK.toRGB(colorData));
     },
 
     toHSV (colorData)
     {
-        return RGB.toHSV(
-            CMYK.toRGB(colorData)
-        );
+        return RGB.toHSV(CMYK.toRGB(colorData));
     },
 
     toHex (colorData)
     {
-        return RGB.toHex(
-            CMYK.toRGB(colorData)
-        );
+        return RGB.toHex(CMYK.toRGB(colorData));
     },
 
     toCMYK (colorData)
@@ -43,9 +37,12 @@ const CMYK = {
 
     toNumeric (colorData)
     {
-        return RGB.toNumeric(
-            CMYK.toRGB(colorData)
-        );
+        return RGB.toNumeric(CMYK.toRGB(colorData));
+    },
+
+    toBits (colorData)
+    {
+        return RGB.toBits(CMYK.toRGB(colorData));
     }
 
 };

@@ -4,7 +4,8 @@ export const COLOR_MODES = [
     'HSV',
     'Hex',
     'CMYK',
-    'Numeric'
+    'Numeric',
+    'Bits'
 ];
 
 export const PREFERRED_CONVERSIONS = {
@@ -13,7 +14,8 @@ export const PREFERRED_CONVERSIONS = {
     HSV: ['HSL', 'RGB'],
     Hex: ['RGB', 'CMYK'],
     CMYK: ['RGB', 'Hex'],
-    Numeric: ['RGB', 'Hex', 'CMYK']
+    Numeric: ['RGB', 'Hex', 'CMYK'],
+    Bits: ['Numeric', 'Hex']
 };
 
 export const MODE_PROPS = {
@@ -22,5 +24,6 @@ export const MODE_PROPS = {
     HSV: ['h', 's', 'v'],
     Hex: (val) => typeof val === 'string',
     CMYK: ['c', 'm', 'y', 'k'],
-    Numeric: (val) => typeof val === 'number'
+    Numeric: (val) => typeof val === 'number',
+    Bits: (val) => val instanceof Array
 }

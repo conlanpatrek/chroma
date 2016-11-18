@@ -22,7 +22,8 @@ export default [
             "m": 0,
             "y": 0,
             "k": 1
-        }
+        },
+        "Bits": [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]
     },
     {
         "Hex": "#ffffff",
@@ -47,7 +48,8 @@ export default [
             "m": 0,
             "y": 0,
             "k": 0
-        }
+        },
+        "Bits": [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true]
     },
     {
         "Hex": "#ff0000",
@@ -72,7 +74,8 @@ export default [
             "m": 1,
             "y": 1,
             "k": 0
-        }
+        },
+        "Bits": [true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]
     },
     {
         "Hex": "#00ff00",
@@ -97,7 +100,8 @@ export default [
             "m": 0,
             "y": 1,
             "k": 0
-        }
+        },
+        "Bits": [false,false,false,false,false,false,false,false,true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false]
     },
     {
         "Hex": "#0000ff",
@@ -122,7 +126,8 @@ export default [
             "m": 1,
             "y": 0,
             "k": 0
-        }
+        },
+        "Bits": [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true,true,true,true,true]
     },
     {
         "Hex": "#ffff00",
@@ -147,7 +152,8 @@ export default [
             "m": 0,
             "y": 1,
             "k": 0
-        }
+        },
+        "Bits": [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false]
     },
     {
         "Hex": "#00ffff",
@@ -172,7 +178,8 @@ export default [
             "m": 0,
             "y": 0,
             "k": 0
-        }
+        },
+        "Bits": [false,false,false,false,false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true]
     },
     {
         "Hex": "#ff00ff",
@@ -197,7 +204,8 @@ export default [
             "m": 1,
             "y": 0,
             "k": 0
-        }
+        },
+        "Bits": [true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,true,true,true,true,true,true,true,true]
     },
 
 
@@ -235,6 +243,7 @@ export default [
             "m": 0,
             "y": 0.6920,
             "k": 0.0706
-        }
+        },
+        "Bits": [true,false,true,false,false,false,true,true,true,true,true,false,true,true,false,true,false,true,false,false,true,false,false,true]
     }
 ];

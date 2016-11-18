@@ -17,16 +17,12 @@ const Hex = {
 
     toHSL (colorData)
     {
-        return RGB.toHSL(
-            Hex.toRGB(colorData)
-        );
+        return RGB.toHSL(Hex.toRGB(colorData));
     },
 
     toHSV (colorData)
     {
-        return RGB.toHSV(
-            Hex.toRGB(colorData)
-        );
+        return RGB.toHSV(Hex.toRGB(colorData));
     },
 
     toHex (colorData)
@@ -36,9 +32,7 @@ const Hex = {
 
     toCMYK (colorData)
     {
-        return RGB.toCMYK(
-            Hex.toRGB(colorData)
-        );
+        return RGB.toCMYK(Hex.toRGB(colorData));
     },
 
     toNumeric (colorData)
@@ -47,6 +41,11 @@ const Hex = {
             'Numeric',
             parseInt(colorData.Hex.substring(1), 16)
         );
+    },
+
+    toBits (colorData)
+    {
+        return RGB.toBits(Hex.toRGB(colorData));
     }
 
 };
