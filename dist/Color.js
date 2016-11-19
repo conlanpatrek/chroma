@@ -6,7 +6,7 @@
 
 padStart = 'default' in padStart ? padStart['default'] : padStart;
 
-var COLOR_MODES = ['RGB', 'HSL', 'HSV', 'Hex', 'CMYK', 'Numeric'];
+var COLOR_MODES = ['RGB', 'HSL', 'HSV', 'Hex', 'CMYK', 'Numeric', 'Bits'];
 
 var PREFERRED_CONVERSIONS = {
     RGB: ['Hex', 'CMYK'],
@@ -14,7 +14,8 @@ var PREFERRED_CONVERSIONS = {
     HSV: ['HSL', 'RGB'],
     Hex: ['RGB', 'CMYK'],
     CMYK: ['RGB', 'Hex'],
-    Numeric: ['RGB', 'Hex', 'CMYK']
+    Numeric: ['RGB', 'Hex', 'CMYK'],
+    Bits: ['Numeric', 'Hex']
 };
 
 var MODE_PROPS = {
@@ -27,6 +28,9 @@ var MODE_PROPS = {
     CMYK: ['c', 'm', 'y', 'k'],
     Numeric: function Numeric(val) {
         return typeof val === 'number';
+    },
+    Bits: function Bits(val) {
+        return val instanceof Array;
     }
 };
 
@@ -49,11 +53,7 @@ var RGB = {
             h = delta && (cMax === r ? mod((g - b) / delta, 6) : cMax === g ? (b - r) / delta + 2 : (r - g) / delta + 4) * 60,
             s = delta && delta / (1 - Math.abs(2 * l - 1));
 
-        return colorData.set('HSL', {
-            h: h,
-            s: s,
-            l: l
-        });
+        return colorData.set('HSL', { h: h, s: s, l: l });
     },
     toHSV: function toHSV(colorData) {
         var r = colorData.RGB.r / 255,
@@ -90,6 +90,35 @@ var RGB = {
     },
     toNumeric: function toNumeric(colorData) {
         return colorData.set('Numeric', Math.round(colorData.RGB.r) * 0x10000 + Math.round(colorData.RGB.g) * 0x100 + Math.round(colorData.RGB.b));
+    },
+    toBits: function toBits(colorData) {
+        var RGB = colorData.RGB,
+            r = Math.round(RGB.r),
+            g = Math.round(RGB.g),
+            b = Math.round(RGB.b),
+            i = 8,
+            bits = [];
+
+        while (i--) {
+            bits.unshift((b & 1) === 1);
+            b = b >> 1;
+        }
+
+        i = 8;
+
+        while (i--) {
+            bits.unshift((g & 1) === 1);
+            g = g >> 1;
+        }
+
+        i = 8;
+
+        while (i--) {
+            bits.unshift((r & 1) === 1);
+            r = r >> 1;
+        }
+
+        return colorData.set('Bits', bits);
     }
 };
 
@@ -167,6 +196,9 @@ var HSL = {
     },
     toNumeric: function toNumeric(colorData) {
         return RGB.toNumeric(HSL.toRGB(colorData));
+    },
+    toBits: function toBits(colorData) {
+        return RGB.toBits(HSL.toRGB(colorData));
     }
 };
 
@@ -244,6 +276,9 @@ var HSV = {
     },
     toNumeric: function toNumeric(colorData) {
         return RGB.toNumeric(HSV.toRGB(colorData));
+    },
+    toBits: function toBits(colorData) {
+        return RGB.toBits(HSV.toRGB(colorData));
     }
 };
 
@@ -270,6 +305,9 @@ var Hex$1 = {
     },
     toNumeric: function toNumeric(colorData) {
         return colorData.set('Numeric', parseInt(colorData.Hex.substring(1), 16));
+    },
+    toBits: function toBits(colorData) {
+        return RGB.toBits(Hex$1.toRGB(colorData));
     }
 };
 
@@ -301,6 +339,9 @@ var CMYK = {
     },
     toNumeric: function toNumeric(colorData) {
         return RGB.toNumeric(CMYK.toRGB(colorData));
+    },
+    toBits: function toBits(colorData) {
+        return RGB.toBits(CMYK.toRGB(colorData));
     }
 };
 
@@ -326,6 +367,53 @@ var Numeric$1 = {
     },
     toNumeric: function toNumeric(colorData) {
         return colorData;
+    },
+    toBits: function toBits(colorData) {
+        var numeric = colorData.Numeric,
+            i = 24,
+            bits = [];
+
+        while (i--) {
+            bits.unshift((numeric & 1) === 1);
+            numeric = numeric >> 1;
+        }
+
+        return colorData.set('Bits', bits);
+    }
+};
+
+var Bits$1 = {
+    toRGB: function toRGB(colorData) {
+        return colorData.set('RGB', colorData.Bits.reduce(function (rgb, bit, i) {
+            if (i < 8) {
+                rgb.r = rgb.r << 1 | bit;
+            } else if (i < 16) {
+                rgb.g = rgb.g << 1 | bit;
+            } else {
+                rgb.b = rgb.b << 1 | bit;
+            }
+            return rgb;
+        }, { r: 0, g: 0, b: 0 }));
+    },
+    toHSL: function toHSL(colorData) {
+        return RGB.toHSL(Bits$1.toRGB(colorData));
+    },
+    toHSV: function toHSV(colorData) {
+        return RGB.toHSV(Bits$1.toRGB(colorData));
+    },
+    toHex: function toHex(colorData) {
+        return RGB.toHex(Bits$1.toRGB(colorData));
+    },
+    toCMYK: function toCMYK(colorData) {
+        return RGB.toCMYK(Bits$1.toRGB(colorData));
+    },
+    toNumeric: function toNumeric(colorData) {
+        return colorData.set('Numeric', colorData.Bits.reduce(function (hex, bit) {
+            return hex << 1 | bit;
+        }, 0));
+    },
+    toBits: function toBits(colorData) {
+        return colorData;
     }
 };
 
@@ -347,6 +435,9 @@ var Null = {
     },
     toNumeric: function toNumeric(colorData) {
         return colorData;
+    },
+    toBits: function toBits(colorData) {
+        return colorData;
     }
 };
 
@@ -357,6 +448,7 @@ var Converters = {
     Hex: Hex$1,
     CMYK: CMYK,
     Numeric: Numeric$1,
+    Bits: Bits$1,
     Null: Null
 };
 

@@ -28,6 +28,11 @@ const Null = {
     toNumeric (colorData)
     {
         return colorData;
+    },
+
+    toBits (colorData)
+    {
+        return colorData;
     }
 
 };

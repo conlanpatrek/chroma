@@ -90,7 +90,10 @@ const RGB = {
 
     toBits (colorData)
     {
-        let {r, g, b} = colorData.RGB,
+        let RGB = colorData.RGB,
+            r = Math.round(RGB.r),
+            g = Math.round(RGB.g),
+            b = Math.round(RGB.b),
             i = 8,
             bits = [];
 

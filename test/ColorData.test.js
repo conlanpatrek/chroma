@@ -1,5 +1,6 @@
 import ColorData from 'Color/ColorData';
 import { COLOR_MODES } from 'Color/Constants';
+import answers from './Converters/answers';
 
 const testColorMode = (mode) => {
     const ensureMode = `ensure${mode}`,
@@ -17,7 +18,7 @@ const testColorMode = (mode) => {
                         it(
                             `Returns the output of ${mode_too}.${toMode}() if ${mode_too === 'Null' ? 'no color modes': mode_too + ' values'} are set`,
                             () => {
-                                let colorData = new ColorData({ [mode]: null, [mode_too]: 'test' });
+                                let colorData = new ColorData({ [mode]: null, [mode_too]: answers[0][mode_too] });
                                 let output = colorData[ensureMode]();
                                 ColorData.Converters[mode_too][toMode].calledWith(colorData).should.be.true;
                                 expect(output).to.eql(ColorData.Converters[mode_too][toMode].returnValues[0]);
