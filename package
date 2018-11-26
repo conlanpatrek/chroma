@@ -81,7 +81,7 @@ function publish () {
     if (current === latest) return console.log('Version needs bumped to publish.')
 
     console.log('Publishing...')
-    console.log(execSync(`git tag v${current} && git push originin v${current}`))
+    console.log(execSync(`git tag v${current} && git push origin v${current}`))
     console.log(execSync('cd dist && npm publish --access public', { encoding: 'utf8' }))
     console.log('Published.')
 }
