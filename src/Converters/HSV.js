@@ -1,5 +1,5 @@
 import RGB from './RGB';
-import { mod } from 'Color/Utility';
+import { mod } from 'Chroma/Utility';
 
 const HSV = {
 

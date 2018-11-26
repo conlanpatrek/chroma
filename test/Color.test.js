@@ -1,5 +1,5 @@
-import Color from 'Color/Color';
-import { COLOR_MODES } from 'Color/Constants';
+import { Color } from 'Chroma/Color';
+import { COLOR_MODES } from 'Chroma/Constants';
 
 const colorDataDouble = () => {
     let data = COLOR_MODES.reduce((op, mode) => {

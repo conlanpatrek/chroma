@@ -1,61 +1,63 @@
-import ColorData from 'Color/ColorData';
-import { COLOR_MODES, MODE_PROPS } from 'Color/Constants';
+import { ColorData } from 'Chroma/ColorData';
+import { COLOR_MODES, MODE_PROPS } from 'Chroma/Constants';
 
-export default class Color
+export class Color
 {
+    /**
+     * Constructor
+     *
+     * @param {*} data 
+     */
     constructor(data = { r: 0, g: 0, b: 0 })
     {
-        this.colorData = ColorDataFactory(data);
+        this.colorData = createColorData(data);
     }
 }
 
-function ColorDataFactory(input)
+/**
+ * Determine the color mode from the input provided, and use that mode
+ * to create a ColorData instance.
+ * 
+ * @param {*} data 
+ */
+function createColorData(data)
 {
-    if (input instanceof ColorData) return input;
+    if (data instanceof ColorData) return data;
 
-    let detected = null;
-    for (let mode in MODE_PROPS) {
-        let props = MODE_PROPS[mode];
-        if (props instanceof Array) {
-            if (
-                props.reduce(
-                    (op, prop) => {
-                        return op && input[prop] !== undefined;
-                    },
-                    true
-                )
-            ) {
-                detected = mode;
-            }
-        } else {
-            if (props(input)) {
-                detected = mode;
-            }
-        }
-    }
+    let detected = detectColorMode(data);
 
     if (detected) {
-        return new ColorData({ [detected]: input });
+        return new ColorData({ [detected]: data });
     }
 
     throw new Error('Can\'t parse color input');
 }
 
+/**
+ * Determine from the shape of the input which color mode the caller is describing.
+ * 
+ * @example detectColorMode({r: 0, g: 0, b: 0}); // returns 'RGB'
+ *          detectColorMode('#ffffff); // returns 'Hex'
+ * @param {*} data An object of some shape. Could be 
+ * 
+ * @return {string|null} 
+ */
+function detectColorMode(data) {
+    for (let mode in MODE_PROPS) {
+        let props = MODE_PROPS[mode];
+        if (props instanceof Function && props(data)) return mode;
+        if (props instanceof Array && props.reduce((op, prop) => (op && data[prop] !== undefined), true)) return mode;
+    }
+    return null;
+}
+
+// Populate the Color prototype with getter/setters for each color mode.
 for (let mode of COLOR_MODES) {
-    let getter = `_get${mode}`,
-        setter = `_set${mode}`;
     Color.prototype[mode] = function (value) {
-        if (value) {
-            return this[setter](value);
-        }
-        return this[getter]();
-    };
+        // Setter, immutable style. Returns new instance.
+        if (value) return new Color(new ColorData({ [mode]: value }));
 
-    Color.prototype[setter] = function (value) {
-        return new Color(ColorData({ [mode]: value }));
-    };
-
-    Color.prototype[getter] = function (value) {
+        // Getter
         this.colorData = this.colorData[`ensure${mode}`]();
         return this.colorData[mode];
     };

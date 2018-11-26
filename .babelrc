@@ -1,14 +1,15 @@
 {
-    "presets": ["es2015"],
-    "plugins": [
+    "presets": [
         [
-            "module-alias",
-            [
-                {
-                    "src": "./src/",
-                    "expose": "Color"
-                }
-            ]
+          "@babel/preset-env",
+          {
+            "targets": "> 0.25%, not dead"
+          }
         ]
+      ],
+    "plugins": [
+        ["module-resolver", {
+            "alias": { "Chroma": "./src" }
+        }]
     ]
 }

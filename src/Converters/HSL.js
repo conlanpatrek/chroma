@@ -1,4 +1,4 @@
-import { mod } from 'Color/Utility';
+import { mod } from 'Chroma/Utility';
 import RGB from './RGB';
 
 const HSL = {

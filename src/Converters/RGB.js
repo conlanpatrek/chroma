@@ -1,5 +1,4 @@
-import padStart from 'lodash/padStart';
-import { mod } from 'Color/Utility';
+import { mod, padStart } from 'Chroma/Utility';
 
 const RGB = {
 

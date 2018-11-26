@@ -1,6 +1,6 @@
-import { Record } from 'immutable';
-import Converters from 'Color/Converters';
-import { COLOR_MODES } from 'Color/Constants';
+import Converters from 'Chroma/Converters';
+import { ColorData } from 'Chroma/ColorData';
+import { COLOR_MODES } from 'Chroma/Constants';
 import Answers from './answers';
 
 const SOLO_MODE = false;
@@ -10,16 +10,6 @@ const MODE_MATCH_DEPTH = {
     'HSL': {h: 1, s: .01, l: .01},
     'HSV': {h: 1, s: .01, v: .01}
 }
-
-let record = Record(
-    COLOR_MODES.reduce(
-        (op, mode) => {
-            op[mode] = null;
-            return op;
-        },
-        {}
-    )
-);
 
 const testColorMode = (mode, solo) => {
     let converter = Converters[mode];
@@ -57,7 +47,7 @@ const testConversionMethod = (converter, conversionMethod, fromMode, toMode) => 
                     it(
                         `Converts ${JSON.stringify(answer[fromMode])} to ${JSON.stringify(answer[toMode])}`,
                         () => {
-                            let colorData = record({ [fromMode]: answer[fromMode] });
+                            let colorData = new ColorData({ [fromMode]: answer[fromMode] });
                             if (MODE_MATCH_DEPTH[toMode]) {
                                 let converted = converter[conversionMethod](colorData);
 

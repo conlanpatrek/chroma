@@ -1,5 +1,5 @@
-import ColorData from 'Color/ColorData';
-import { COLOR_MODES } from 'Color/Constants';
+import { ColorData } from 'Chroma/ColorData';
+import { COLOR_MODES } from 'Chroma/Constants';
 import answers from './Converters/answers';
 
 const testColorMode = (mode) => {
