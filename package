@@ -1,0 +1,86 @@
+#!/usr/bin/env node
+const source = require('./package.json')
+const fs = require('fs')
+const { execSync } = require('child_process')
+
+main()
+
+/**
+ * Routes the provided arguments to different tasks.
+ */
+function main() {
+    const args = process.argv.slice(2)
+
+    if (args.length === 0)  return build()
+
+    if (args[0] === 'bump') return bump(args[1] || 'patch')
+
+    if (args[0] === 'publish') return publish()
+
+    throw new Error('Found unprocessable arguments: ' + args.join(', '))
+}
+
+/**
+ * Copies over a package.json for the dist directory.
+ */
+function build () {
+    console.log('Moving package.json into dist directory...')
+
+    const package = {
+        name: source.name,
+        version: source.version,
+        description: source.description,
+        main: source.main.replace(/^dist\//, ''),
+        repository: source.repository,
+        author: source.author,
+        license: source.license
+    }
+    
+    fs.writeFileSync('./dist/package.json', JSON.stringify(package, null, 2) + "\r\n", 'utf8')
+    console.log('Done.')
+}
+
+/**
+ * Bumps the version of this lib.
+ *
+ * @param {string} mode "major" "minor" or "patch"
+ */
+function bump (mode = 'patch') {
+    const version = source.version.split('.').map(i => parseInt(i, 10))
+
+    switch (mode) {
+        case 'major':
+            version[0]++
+            version[1] = 0
+            version[2] = 0
+            break
+        case 'minor':
+            version[1]++
+            version[2] = 0
+            break
+        case 'patch':
+            version[2]++
+            break
+        default:
+            throw new Error(`"major", "minor", and "patch" are the only accepted arguments for the bump task. Received "${mode}"`)
+    }
+
+    console.log(`Bumping ${mode} version...`)
+    source.version = version.join('.')
+    fs.writeFileSync('./package.json', JSON.stringify(source, null, 2) + "\r\n", 'utf8')
+    console.log(`Version updated to ${source.version}.`)
+}
+
+/**
+ * Checks whether or not the version has been bumped, and if so, publishes a new version of this lib.
+ */
+function publish () {
+    const current = require('./dist/package.json').version
+    const latest = execSync(`npm show ${source.name} version`, { encoding: 'utf8' }).trim()
+
+    if (current === latest) return console.log('Version needs bumped to publish.')
+
+    console.log('Publishing...')
+    console.log(execSync('cd dist && npm publish --access public', { encoding: 'utf8' }))
+    console.log('Published.')
+}

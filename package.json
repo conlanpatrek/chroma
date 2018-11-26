@@ -1,6 +1,6 @@
 {
   "name": "@conlan/chroma",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/Chroma.js",
   "devDependencies": {
@@ -20,12 +20,14 @@
   "scripts": {
     "test": "mocha 'test/**/*.test.js' --compilers js:@babel/register --require ./test/bootstrap.js",
     "clean": "rm -rf dist/*",
-    "build": "rollup -c"
+    "build:scripts": "rollup -c",
+    "build:package": "cp ./README.md ./dist/README.md && ./package",
+    "build": "npm run build:scripts && npm run build:package"
   },
   "repository": {
     "type": "git",
-    "url": "ssh://cp-aws/v1/repos/Colors"
+    "url": "https://github.com/conlanpatrek/chroma"
   },
-  "author": "",
+  "author": "Conlan Craft",
   "license": "ISC"
 }
